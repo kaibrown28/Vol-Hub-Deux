@@ -70,4 +70,14 @@ const deleteProjAdmin = (req,res) =>{
         }
         res.status(200).send(`User deleted with ID: ${id}`)
     })
-}ß
+}
+
+//exporting CRUD for project_administrators table
+
+module.exports = {
+    getProjAdmin,
+    getProjAdminById,
+    CreateProjAdmin,
+    updateProjAdmin,
+    deleteProjAdmin,
+}
