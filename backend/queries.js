@@ -12,7 +12,7 @@ const pool = new Pool({
 
 //get all project admins
 const getProjAdmin = (req,res) => {
-    pool.query('SELECT * FROM project_administrators ORDER BY id ASC', (error, results) => {
+    pool.query('SELECT * FROM project_admins ORDER BY id ASC', (error, results) => {
         if (error){
             throw error
         }
@@ -23,7 +23,7 @@ const getProjAdmin = (req,res) => {
 const getProjAdminById = (req,res) => {
     const id = parseInt(req.params.id)
 
-    pool.query('SELECT * from project_adminstrators WHERE id = $1', [id], (error,results) => {
+    pool.query('SELECT * from project_admins WHERE id = $1', [id], (error,results) => {
         if (error) {
             throw error
         }
@@ -33,29 +33,29 @@ const getProjAdminById = (req,res) => {
 
 //create a project admin
 const CreateProjAdmin = (req,res) => {
-    const {name, email, projects, organization, looking for volunteers} = req.body
+    const {email, name, lookingforvol, phone, projects} = req.body
 
-    pool.query('INSERT INTO project_administrators (name, email, projects, organization, looking for volunteers) VALUES ($1, $2, $3, $4, $5) RETURNING *')
-        if(error) {
+    pool.query('INSERT INTO project_admins (email, name, lookingforvol, phone, projects) VALUES ($1, $2, $3, $4, $5)', [email, name, lookingforvol, phone, projects], (error, results) =>{
+        if (error) {
             throw error
         }
-        res.status(201).send(`User added with ID: ${results.rows[0].id}`)
+        res.status(201).send(`User added.`)
     })
 };
 
 //update project administrator
 const updateProjAdmin = (req,res) => {
     const id = parseInt(req.params.id)
-    const {name, email, projects, organization, looking for volunteers} = req.body
+    const {email, name, lookingforvol, phone, projects} = req.body
 
     pool.query(
-        'UPDATE project_administrators set name = $1, email = $2, projects = $3, organization = $4, looking for volunteers = $5, id = $6',
-        [name, email, projects, projects, organization, looking for volunteers, id],
+        'UPDATE project_admins SET email = $1, name = $2, lookingforvol = $3, phone = $4, projects = $5 WHERE id = $6', 
+        [email, name, lookingforvol, phone, projects, id],
         (error, results) => {
             if (error) {
                 throw error
             }
-            res.status(200).send(`User modified with ID: ${id}`)
+            res.status(200).send(`User modified with id: ${id}`)
         }
     )
 };
@@ -64,7 +64,7 @@ const updateProjAdmin = (req,res) => {
 const deleteProjAdmin = (req,res) =>{
     const id = parseInt(req.params.id)
 
-    pool.query('DELETE FROM project_administrators WHERE id = $1', [id], (error, results) =>{
+    pool.query('DELETE FROM project_admins WHERE id = $1', [id], (error, results) =>{
         if(error){
             throw error
         }
@@ -72,7 +72,7 @@ const deleteProjAdmin = (req,res) =>{
     })
 }
 
-//exporting CRUD for project_administrators table
+//exporting CRUD for project_admins table
 
 module.exports = {
     getProjAdmin,

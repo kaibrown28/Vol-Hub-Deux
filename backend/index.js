@@ -1,7 +1,7 @@
 //requirements
 const express = require('express')
 const bodyParser = require('body-parser')
-const db = require('.queries')
+const db = require('./queries')
 //
 const app = express()
 //variables
@@ -29,6 +29,6 @@ app.listen(port, () => {
 //setting http requests for project_administrators table
 app.get('/projadmin', db.getProjAdmin)
 app.get('/projadmin/:id', db.getProjAdminById)
-app.post('/projadmin/:id', db.CreateProjAdmin)
-app.put('/users/:id', db.updateUser)
+app.post('/projadmin/', db.CreateProjAdmin)
+app.put('/projadmin/:id', db.updateProjAdmin)
 app.delete('/projadmin/:id', db.deleteProjAdmin)
