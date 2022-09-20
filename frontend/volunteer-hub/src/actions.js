@@ -30,3 +30,30 @@ function loginError(message) {
         message
     }
 };
+
+export function loginUser(creds) {
+
+    let config = {
+      method: 'POST',
+      headers: { 'Content-Type':'application/x-www-form-urlencoded' },
+      body: `username=${creds.username}&password=${creds.password}`
+    }
+  
+    return dispatch => {
+      dispatch(requestLogin(creds))
+  
+      return fetch('http://localhost:3001/sessions/create', config)
+        .then(response =>
+          response.json().then(user => ({ user, response }))
+              ).then(({ user, response }) =>  {
+          if (!response.ok) {
+            dispatch(loginError(user.message))
+            return Promise.reject(user)
+          } else {
+            localStorage.setItem('id_token', user.id_token)
+            localStorage.setItem('id_token', user.access_token)
+            dispatch(receiveLogin(user))
+          }
+        }).catch(err => console.log("Error: ", err))
+    }
+  }
