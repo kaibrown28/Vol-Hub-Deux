@@ -50,4 +50,4 @@ const quotesApp = combineReducers({
     auth, quotes
 })
 
-export default quotesApp
+export default quotesApp;
